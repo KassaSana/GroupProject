@@ -1,12 +1,12 @@
+#include <iostream>
 #include <limits>
 #include <unordered_map>
-#include <iostream>
-#include <vector>
 #include <cstdlib>
+#include <vector>
 #include <queue>
 #include <cmath>
-#include <ctime>
 #include <iomanip>
+#include <ctime>
 using namespace std;
 
 // Struct to represent a cell in the maze
@@ -27,7 +27,7 @@ struct Node {
 };
 
 
-unordered_map<int, vector<pair<int, double>>> buildGraph(const vector<Cell> &maze, int rows, int cols) {
+unordered_map<int, vector<pair<int, double>>> graphBuild(const vector<Cell> &maze, int rows, int cols) {
     unordered_map<int, vector<pair<int, double>>> graph;
 
     for (const auto &cell : maze) {
@@ -40,6 +40,7 @@ unordered_map<int, vector<pair<int, double>>> buildGraph(const vector<Cell> &maz
                 {cell.x, cell.y - 1}, // left
                 {cell.x, cell.y + 1}  // right
         };
+
         // checks if each neighbor is within bounds (rows and columns)
         for (const auto &[nx, ny] : neighbors) {
             if (nx >= 0 && nx < rows && ny >= 0 && ny < cols) {
@@ -77,6 +78,7 @@ vector<Cell> generateMaze(int rows, int cols) {
 
 // A* Algorithm
 vector<int> aStar(const unordered_map<int, vector<pair<int, double>>> &graph, const vector<Cell> &maze, int start, int end) {
+
     unordered_map<int, double> gScore, fScore;
     unordered_map<int, int> predecessors;
     priority_queue<Node, vector<Node>, greater<Node>> pq;
@@ -85,6 +87,7 @@ vector<int> aStar(const unordered_map<int, vector<pair<int, double>>> &graph, co
         gScore[id] = numeric_limits<double>::infinity();
         fScore[id] = numeric_limits<double>::infinity();
     }
+
     gScore[start] = 0.0;
     fScore[start] = euclideanDistance(maze[start].x, maze[start].y, maze[end].x, maze[end].y);
     pq.push({start, fScore[start]});
@@ -93,7 +96,7 @@ vector<int> aStar(const unordered_map<int, vector<pair<int, double>>> &graph, co
         int current = pq.top().id;
         pq.pop();
 
-        if (current == end) break;
+        if (current == end) break; //stops if at end
 
         for (const auto &[neighbor, weight] : graph.at(current)) {
             double tentativeGScore = gScore[current] + weight;
@@ -131,8 +134,8 @@ vector<int> dijkstra(const unordered_map<int, vector<pair<int, double>>> &graph,
     }
 
     dist[start] = 0.0;
-
     pq.push({start, 0.0});
+
     while (!pq.empty()) {
         int current = pq.top().id;//gets node w/ smallest distance
         pq.pop();
@@ -155,18 +158,22 @@ vector<int> dijkstra(const unordered_map<int, vector<pair<int, double>>> &graph,
     for (int at = end; at != start; at = original[at]) {
         path.push_back(at);
     }
+
     path.push_back(start);
     reverse(path.begin(), path.end());
     return path;
 }
+
 // Display maze w/ path
 void dispMaze(const vector<Cell> &maze, const vector<int> &path, int rows, int cols) {
     vector<string> mazeDisplay(rows * cols, ".");
     for (int id : path) {
         mazeDisplay[id] = "*";
     }
-    mazeDisplay[0] = "S"; // Start
-    mazeDisplay[rows * cols - 1] = "E"; // End
+
+    mazeDisplay[0] = "S";  // start
+    mazeDisplay[rows * cols - 1] = "E"; // end
+
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
             cout << mazeDisplay[i * cols + j] << " ";
@@ -181,8 +188,9 @@ int main() {
     srand(time(0));
     int rows = 40, cols = 40;  // size
     vector<Cell> maze = generateMaze(rows, cols);
-    auto graph = buildGraph(maze, rows, cols);
+    auto graph = graphBuild(maze, rows, cols);
     int start = 0, end = rows * cols - 1;
+
 
     cout << "------------------------------------------------------------------" << endl;
     cout << "|  GRAPH PATHFINDING PERFORMANCE                                 |" << endl;
