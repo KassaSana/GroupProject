@@ -13,4 +13,5 @@ Pathfinders
 1. **Clone the Repository**
    ```bash
    git clone https://github.com/KassaSana/GroupProject.git
-2. Run Program 
+2. Compile Code
+3. Enjoy!
