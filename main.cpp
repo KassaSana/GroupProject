@@ -7,6 +7,7 @@
 #include <cmath>
 #include <iomanip>
 #include <ctime>
+#include <algorithm>
 using namespace std;
 
 // Struct to represent a cell in the maze
