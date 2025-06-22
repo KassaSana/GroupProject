@@ -1,5 +1,7 @@
 Pathfinders
 
+This C++ program generates a random maze and allows the user to visualize and compare the performance of two graph pathfinding algorithms: Dijkstra's and A*. It constructs a graph from the maze, calculates paths from start to end, and measures execution time for each algorithm.
+
 # How to Run the Code
 
 ## Requirements
